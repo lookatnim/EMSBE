@@ -8,16 +8,28 @@ const PORT = process.env.PORT;
 
 
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = ['http://localhost:3000'];
+const corsOptions = {
+  origin: (origin,callback)=>{
+    if(allowedOrigins.indexOf(origin)!==-1||!origin){
+      callback(null,true)
+      console.log(`Allowed  ${allowedOrigins}`)
+    }else{
+      callback(new Error('Not allowed.'))
+    }
+  }
+}
+
+app.use(cors(corsOptions));
 
 
 connectDB();
 
-// Routes
-app.use('/api', require('./routes/empRoute'));
-// app.use('/api', require('./routes/tasks'));
 
-// Start server
+app.use('/api', require('./routes/empRoute'));
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
