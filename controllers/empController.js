@@ -19,6 +19,9 @@ const handleValidationError = (error, res) => {
       case "gender":
         messages.push("Invalid Gender.");
         break;
+        case "salary":
+        messages.push("Invalid Salary.");
+        break;
       default:
         messages.push(error.errors[field].message);
     }
@@ -36,12 +39,23 @@ const getEmp = async (req, res) => {
   }
 };
 
+const getEmpById = async (req, res) => {
+    try {
+    const { empid } = req.params;
+      const emp = await EmpModel.findById(empid);
+      if (!emp) return res.status(404).json({ message: 'Employee not found' });
+      res.json(emp);
+    } catch (error) {
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
 
 const addEmp = async (req, res) => {
   try {
     const employee = new EmpModel(req.body);
     await employee.save();
-    res.status(201).json({ message: "Employee added successfully" });
+    res.status(200).json({ message: "Employee added successfully" });
   } catch (error) {
     console.error("Error adding employee:", error);
     if (error.name === "ValidationError") {
