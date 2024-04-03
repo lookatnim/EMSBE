@@ -31,6 +31,10 @@ const empSchema = new mongoose.Schema({
     enum:['Male',"Female"],
     required: true,
   },
+  salary:{
+    type: Number,
+    required: false
+  }
 });
 
 module.exports = mongoose.model("Employee", empSchema);
